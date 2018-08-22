@@ -49,6 +49,8 @@ RequestDump is build using .
 
  - currently server support only one requeset session
  - add mock features
+ - add support for multiple user
+ - add filter
 
 License
 ----
