@@ -8,6 +8,27 @@ console.log("app started ..");
 var dt = dateTime.create();
 dt.format('m/d/Y H:M:S');
 
+
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    //res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
 app.get('/log*', function (req, res) { 
 
    res.sendFile(__dirname +'/public/index.html')  
@@ -62,7 +83,7 @@ app.all('/*',  function (req, res) {
         dumped = dumped +"body dumped :"+ req.body ;
         
     
-        res.send('open <ip>/log to view the request' );
+        res.send('{"status":"OK"}' );
         
        
         io.emit('hi', reqdump);
