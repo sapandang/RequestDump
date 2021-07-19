@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Working with Openlayers</title>
+	<link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
+	<!-- Openlayers CSS file-->
+	
+	<style type="text/css">
+		#map{
+			width:100%;
+			height:600px;
+		}
+	</style>
+	<!--Basic styling for map div, 
+	if height is not defined the div will show up with 0 px height  -->
+  <script src="/datas/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+
+</head>
+<body>
+	<div id="map" >
+		<!-- Your map will be shown inside this div-->
+	</div>
+</body>
+<script src="https://openlayers.org/en/v4.6.5/build/ol.js" type="text/javascript"></script>
+	<!-- Openlayesr JS fIle -->
+	<script type="text/javascript" >
+     var socket = io('', { path: '/log' });
+   
+var latlong = [77.2259302,28.5711952];	 
+
+// var baseMapLayer = new ol.layer.Tile({
+//   source: new ol.source.OSM()
+// });
+
+var baseMapLayer = new ol.layer.Tile({
+        source: new ol.source.OSM({
+            url: 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+            attributions: [
+                new ol.Attribution({ html: '© Google' }),
+                new ol.Attribution({ html: '<a href="https://developers.google.com/maps/terms">Terms of Use.</a>' })
+            ]
+        })
+    });
+
+var map = new ol.Map({
+  target: 'map',
+  layers: [ baseMapLayer],
+  view: new ol.View({
+          center: ol.proj.fromLonLat(latlong), 
+          zoom: 20 //Initial Zoom Level
+        })
+});
+
+var marker = new ol.Feature({
+  geometry: new ol.geom.Point(
+    ol.proj.fromLonLat(latlong)
+  ),  // Cordinates of New York's Town Hall
+});
+
+
+var vectorSource = new ol.source.Vector({
+  features: [marker]
+});
+var markerVectorLayer = new ol.layer.Vector({
+  source: vectorSource,
+});
+map.addLayer(markerVectorLayer);
+
+socket.on('hi', function (msg) {
+         
+
+  console.log(JSON.stringify(msg));
+
+  if(msg.lon!=undefined){
+    console.log([msg.lat,msg.lon]);
+    marker.setGeometry(new ol.geom.Point(
+    ol.proj.fromLonLat([parseFloat(msg.lon),parseFloat(msg.lat)])
+  ));
+  map.getView().setCenter(ol.proj.fromLonLat([parseFloat(msg.lon),parseFloat(msg.lat)]));
+
+  }
+
+
+         
+        });
+  </script>
+	<!-- Our map file -->
+</html>

@@ -56,14 +56,15 @@ app.all('/*',  function (req, res) {
         reqdump.uri = req.originalUrl;
         reqdump.timestamp = new Date(dt.now());
         reqdump.ip = req.ip;
+        reqdump.lat = req.query.lat;
+        reqdump.lon = req.query.lon;
 
         var dumped = req.originalUrl;
         dumped = dumped + "<br>" +JSON.stringify(req.headers) +"<br>";
         dumped = dumped +"body dumped :"+ req.body ;
         
     
-        res.send('open <ip>/log to view the request' );
-        
+        res.send('open <ip>/log to view the request' );      
        
         io.emit('hi', reqdump);
     

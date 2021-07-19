@@ -1,232 +1,274 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+      h4 {
+        font-size: 1.8em;
+        padding: 0px;
+        margin: 0px;
+      }
 
-<head>
-  <style>
-    h4 {
-      font-size: 1.8em;
-      padding: 0px;
-    margin: 0px;
-    }
+      .btn {
+        width: 100%;
+        background: #21f500;
+        background-image: -webkit-linear-gradient(top, #21f500, #6cd95b);
+        background-image: -moz-linear-gradient(top, #21f500, #6cd95b);
+        background-image: -ms-linear-gradient(top, #21f500, #6cd95b);
+        background-image: -o-linear-gradient(top, #21f500, #6cd95b);
+        background-image: linear-gradient(to bottom, #21f500, #6cd95b);
+        font-family: Arial;
+        color: #ffffff;
+        font-size: 15px;
+        padding: 10px 20px 10px 20px;
+        text-decoration: none;
+      }
 
-    .btn {
-      width: 100%;
-  background: #21f500;
-  background-image: -webkit-linear-gradient(top, #21f500, #6cd95b);
-  background-image: -moz-linear-gradient(top, #21f500, #6cd95b);
-  background-image: -ms-linear-gradient(top, #21f500, #6cd95b);
-  background-image: -o-linear-gradient(top, #21f500, #6cd95b);
-  background-image: linear-gradient(to bottom, #21f500, #6cd95b);
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 15px;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-}
+      .btn:hover {
+        background: #3cb0fd;
+        background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+        background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+        background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+        background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+        background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+        text-decoration: none;
+      }
 
-.btn:hover {
-  background: #3cb0fd;
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-  text-decoration: none;
-}
+      #tbl {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
 
+      #tbl td,
+      #tbl th {
+        border: 1px solid #ddd;
+        padding: 1px;
+      }
 
-#tbl {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
+      #tbl tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-#tbl td, #tbl th {
-    border: 1px solid #ddd;
-    padding: 1px;
-}
+      #tbl tr:hover {
+        background-color: #ddd;
+      }
 
-#tbl tr:nth-child(even){background-color: #f2f2f2;}
+      #tbl th {
+        padding-top: 1px;
+        padding-bottom: 1px;
+        text-align: left;
+        background-color: #4caf50;
+        color: white;
+      }
 
-#tbl tr:hover {background-color: #ddd;}
+      #app {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
 
-#tbl th {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
-}
+      #header {
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+        transition: background-color 0.3s ease-in-out;
+        background-color: #fff;
+        height: 9%;
+        padding: 5px 60px;
+        z-index: 2;
+        display: table-row;
+      }
 
+      #sidebar {
+        background-color: rgb(148, 143, 143);
+        width: 20%;
+        height: 85%;
+        margin-top: 1px;
+        float: left;
+        overflow: auto;
+      }
 
-    #app 
-    {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    }
+      #content {
+        overflow: auto;
+        width: 80%;
+        height: 85%;
+        float: left;
+      }
 
-    #header {
-      position: relative;
-      width: 100%;
-      top: 0;
-      box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
-      transition: background-color 0.3s ease-in-out;
-      background-color: #fff;
-      height: 9%;
-      padding: 5px 60px;
-      z-index: 2;
-    }
+      #footer {
+        clear: both;
+        background-color: azure;
+        text-align: center;
+      }
+    </style>
+    <title>Request Dump</title>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
-    #sidebar {
-      background-color: rgb(148, 143, 143);
-      width: 20%;
-      height: 85%;
-      margin-top: 1px;
-      float: left;
-      overflow:auto;
-    }
+    <link
+      href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.1/dist/jsoneditor.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.1/dist/jsoneditor.min.js"></script>
+  </head>
 
-    #content {
-      overflow: auto;
-      width: 80%;
-      height: 85%;
-      float: left;
-      
-    }
+  <body style="margin: 0px;">
+    <div id="app">
+      <div id="header">
+        <h4>RequestDump</h4>
+        <h4>Total Requests : {{message.length}}</h4>
 
-#footer{
-    clear: both;
-    background-color: azure;
-    text-align: center;
-}
+        <select v-model="selected">
+          <option v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+        <span>Filter: {{ selected }}</span>
+        <button v-on:click="clear">CLEAR</button>
+      </div>
+      <div id="sidebar">
+        <div v-for="msg in message">
+          <button class="btn" v-on:click="displaycontent(msg)">
+            {{ msg.method +" "+ msg.timestamp }}
+          </button>
+        </div>
+      </div>
+      <div id="content">
+        <div style="padding: 15px;">
+          <!-- <button v-on:click="greet()">send data</button></div> -->
 
-  </style>
-  <title>Request Dump</title>
- <!-- <script src="https://unpkg.com/vue"></script> -->
- <script src="/datas/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+          <table id="tbl">
+            <tr>
+              <th>method</th>
+              <th>{{content.method}}</th>
+            </tr>
+          </table>
 
-</head>
+          <br />
 
-<body style="margin: 0px;">
-  <div id="app">
-    <div id="header">
-      <h4>RequestDump</h4>
-    </div>
-    <div id="sidebar">
-      <div v-for="msg in message">
-        <button class="btn" v-on:click="displaycontent(msg)"> {{ msg.method +" "+ msg.timestamp }}</button>
+          <table id="tbl">
+            <tr>
+              <th>url</th>
+              <th>{{content.uri}}</th>
+            </tr>
+          </table>
+
+          <br />
+          <table id="tbl">
+            <tr>
+              <th>From ip</th>
+              <th>{{content.ip}}</th>
+            </tr>
+          </table>
+
+          <table id="tbl">
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+            <tr v-for="(value, key) in headers">
+              <td>{{key}}</td>
+              <td>{{value}}</td>
+            </tr>
+          </table>
+
+          <br />
+
+          <table id="tbl">
+            <tr>
+              <th>Body</th>
+            </tr>
+            <tr>
+              <div id="jsoneditor" style="width: 100%; height: 5  00px;"></div>
+            </tr>
+            <tr>
+              <td style="word-break: break-word;" >{{content.body}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="footer">
+        Request dump <br />
+        <a href="https://github.com/sapandang/RequestDump">
+          https://github.com/sapandang/RequestDump</a
+        >
       </div>
     </div>
-    <div id="content">
-      <div style="padding: 15px;">
-       <!-- <button v-on:click="greet()">send data</button></div> -->
-     
-      <table id="tbl">
-          <tr>
-            <th>method</th>
-            <th>{{content.method}}</th>
-            
-          </tr>
-        
 
-          </table>
-
-      <br>      
-      
-     
-      
-      <table id="tbl">
-          <tr>
-            <th>url</th>
-            <th> {{content.uri}}</th>
-            
-          </tr>
-        
-
-          </table>
-
-
-       <br>
-       <table id="tbl">
-          <tr>
-            <th>From ip</th>
-            <th>{{content.ip}}</th>
-            
-          </tr>
-         
-
-          </table>
-
-      <table id="tbl">
-          <tr>
-            <th>Key</th>
-            <th>Value</th>
-            
-          </tr>
-          <tr v-for="(value, key) in headers">
-              <td>{{key}}</td>
-              <td>{{value}}</td>             
-          </tr>
-
-          </table>
-     
-      <br>
-     
-     
-      <table id="tbl">
-          <tr>
-            <th>Body</th>                       
-          </tr>
-          <tr>
-              <td> {{content.body}}</td>                           
-          </tr>
-          </table>
-      
-
-</div>
-    </div>
-    <div id="footer">Request dump <br>
- <a href="https://github.com/sapandang/RequestDump"> https://github.com/sapandang/RequestDump</a>	</div>
-  </div>
-
-    
     <script>
-        var socket = io('', { path: '/log' });
-    
-        var app = new Vue({
-          el: '#app', data: {
-            message: [],
-            content: "",
-            headers : {}
-          
+      var socket = io("", { path: "/requestdump/log" });
+      //var socket = io("", { path: "/log" });//local testing
+       // create the editor
+       
+      
+      var app = new Vue({
+        el: "#app",
+        data: {
+          message: [],
+          content: "",
+          headers: {},
+          selected: "ALL",
+          options: [],
+          uriList: [],
+          isJson:true,
+          editorx:null
+        },
+        methods: {
+          greet: function(event) {
+            socket.emit("hi", "world");
+          },
+          displaycontent: function(msg) {
+            this.content = msg;
+
+            //set the json editor 
+            if(this.content.body.startsWith('[') || this.content.body.startsWith('{') ){
+              console.log("is json");
+              this.isJson=true;
+
+              if(this.editorx == null)
+              {
+              var container = document.getElementById("jsoneditor")
+              // var container =this.$refs['jsoneditor'];
+              var options = {}
+              const editor = new JSONEditor(container, options);
+              this.editorx=editor;
+              }else{
+                this.editorx.set(JSON.parse(this.content.body));
+              }
+
+              }else{
+                this.isJson=false;
+              }
+
+
+            this.headers = JSON.parse(msg.headers);
+            console.log("called");
+          },
+          clear: function() {
+            this.message = [];
           }
-          , methods: {
-            greet: function (event) {
-              socket.emit('hi', 'world');
-            },
-            displaycontent: function (msg) {
-              this.content = msg;
-              this.headers = JSON.parse(msg.headers);
-              console.log("called");
-            }
-          }
-        })
-        socket.on('hi', function (msg) {
+        }
+      });
+      socket.on("hi", function(msg) {
+        if (app.selected == "ALL" || app.selected == msg.uri) {
           app.message.push(msg);
-         
-          console.log(msg);
-          console.log("dumped "+JSON.parse(msg.headers));
-        });
-       // console.log("dumped "+msg);
-       // console.log("dumped "+JSON.parse(app.content));
-      </script>
-    
-    
+        }
 
-</body>
+        //add the data to the socket
+        if (!app.uriList.includes("" + msg.uri)) {
+          app.uriList.push("" + msg.uri);
+          app.options.push({ text: msg.uri, value: msg.uri });
+        }
 
-
-
+        console.log(msg);
+        console.log("dumped " + JSON.parse(msg.headers));
+      });
+      // console.log("dumped "+msg);
+      // console.log("dumped "+JSON.parse(app.content));
+    </script>
+  </body>
 </html>
